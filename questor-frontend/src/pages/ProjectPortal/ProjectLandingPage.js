@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import KanbanBoardPage from "./KanbanBoardPage";
 import NavbarDynamic from "../../components/navbar/NavbarDynamic";
 import ProjectBoardSideBar from "../../components/SideBar/ProjectBoardSideBar";
@@ -31,9 +31,13 @@ const ProjectLandingPage = () => {
     fetch(`http://localhost:8080/questor/projects/getProject/${projectId}`)
       .then((response) => response.json())
       .then((data) => {
-        setProject(data);
-        setIsLoading(false);
-        toast.success("Project details loaded successfully!");
+        if (data && data.title) {
+          setProject(data);
+          setIsLoading(false);
+          toast.success("Project details loaded successfully!");
+        } else {
+          throw new Error("Invalid project data");
+        }
       })
       .catch((error) => {
         toast.error("Failed to fetch project details: " + error);
@@ -60,7 +64,7 @@ const ProjectLandingPage = () => {
               <p className="mt-4">{project.description}</p>
             </div>
           </div>
-          <div className="bg-gray-800 p-8 rounded-xl shadow-lg flex-grow ">
+          <div className="bg-gray-800 p-8 rounded-xl shadow-lg flex-grow">
             <KanbanBoardPage />
           </div>
         </div>
@@ -77,7 +81,6 @@ const ProjectLandingPage = () => {
         isOpen={isTermsOpen}
         onClose={() => setIsTermsOpen(false)}
       />
-      <ToastContainer />
     </div>
   );
 };

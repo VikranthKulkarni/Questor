@@ -8,7 +8,6 @@ import HowToUse from "../../components/ProjectSidePages/HowToUse";
 import TermsAndConditions from "../../components/ProjectSidePages/TermsAndConditions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../../components/Toast/toastStyles.css"; // Import the custom CSS file
 
 const ProjectDashBoardPage = () => {
   const userId = sessionStorage.getItem("userId");
@@ -45,9 +44,7 @@ const ProjectDashBoardPage = () => {
     fetch(`http://localhost:8080/questor/projects/user/${userId}`)
       .then((response) => response.json())
       .then((data) => setProjects(data))
-      .catch((error) => toast.error("Failed to fetch projects: " + error, {
-        className: "custom-toast",
-      }));
+      .catch((error) => toast.error("Failed to fetch projects: " + error));
   };
 
   const handleCreateProject = () => {
@@ -61,13 +58,9 @@ const ProjectDashBoardPage = () => {
         setProjects([...projects, createdProject]);
         setIsModalOpen(false);
         resetForm();
-        toast.success("Project created successfully", {
-          className: "custom-toast",
-        });
+        toast.success("Project created successfully");
       })
-      .catch((error) => toast.error("Failed to create project: " + error, {
-        className: "custom-toast",
-      }));
+      .catch((error) => toast.error("Failed to create project: " + error));
   };
 
   const handleUpdateProject = () => {
@@ -84,13 +77,9 @@ const ProjectDashBoardPage = () => {
         setProjects(updatedProjects);
         setIsModalOpen(false);
         resetForm();
-        toast.success("Project updated successfully", {
-          className: "custom-toast",
-        });
+        toast.success("Project updated successfully");
       })
-      .catch((error) => toast.error("Failed to update project: " + error, {
-        className: "custom-toast",
-      }));
+      .catch((error) => toast.error("Failed to update project: " + error));
   };
 
   const handleDeleteProject = (projectId) => {
@@ -110,17 +99,11 @@ const ProjectDashBoardPage = () => {
           setProjects(updatedProjects);
           setIsDeleteModalOpen(false);
           setDeleteConfirmationText("");
-          toast.success("Your project has been deleted", {
-            className: "custom-toast custom-toast-success",
-          });
+          toast.success("Your project has been deleted");
         })
-        .catch((error) => toast.error("Failed to delete project: " + error, {
-          className: "custom-toast",
-        }));
+        .catch((error) => toast.error("Failed to delete project: " + error));
     } else {
-      toast.error("You must type 'YES' to confirm.", {
-        className: "custom-toast",
-      });
+      toast.error("You must type 'YES' to confirm.");
     }
   };
 
@@ -336,10 +319,6 @@ const ProjectDashBoardPage = () => {
       <TermsAndConditions
         isOpen={isTermsOpen}
         onClose={() => setIsTermsOpen(false)}
-      />
-      <ToastContainer
-        toastClassName="custom-toast"
-        bodyClassName="custom-toast-container"
       />
     </div>
   );
