@@ -64,4 +64,5 @@ public class UserController {
         boolean isValid = userService.validatePassword(userDTO.getUserId(), userDTO.getPassword());
         return ResponseEntity.ok(isValid);
     }
+
 }

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./CSS/style.css";
 
 const LoginPage = () => {
@@ -30,6 +32,8 @@ const LoginPage = () => {
       console.log("Logged in user data: ", data);
       sessionStorage.setItem("userId", data.userId);
       sessionStorage.setItem("role", data.role);
+
+      toast.success("Login successful!");
 
       if (data.role === "isAdmin") {
         navigate("/adminDashboard");
@@ -100,7 +104,8 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error("Login error: ", error);
-      setError(error.message);
+      // setError(error.message);
+      toast.error("Login failed: " + error.message);
     }
   };
 
@@ -189,6 +194,7 @@ const LoginPage = () => {
       </div>
       <div className="circle circle1 bg-gray-700"></div>
       <div className="circle circle2 bg-gray-500"></div>
+      <ToastContainer />
     </div>
   );
 };

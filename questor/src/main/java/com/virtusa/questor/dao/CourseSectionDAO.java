@@ -1,14 +1,18 @@
 package com.virtusa.questor.dao;
 
 import com.virtusa.questor.dto.CourseSectionDTO;
-import com.virtusa.questor.model.CourseSection;
+import com.virtusa.questor.dto.SectionContentDTO;
 import com.virtusa.questor.model.Course;
+import com.virtusa.questor.model.CourseSection;
+import com.virtusa.questor.model.SectionContent;
 import com.virtusa.questor.repository.CourseRepository;
 import com.virtusa.questor.repository.CourseSectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -54,36 +58,64 @@ public class CourseSectionDAO {
         }
     }
 
-    public CourseSectionDTO updateById(Long id, CourseSectionDTO courseSectionDTO){
+    public CourseSectionDTO updateById(Long id, CourseSectionDTO courseSectionDTO) {
         CourseSection existingCourseSection = courseSectionRepo.findById(id).orElse(null);
-        if (existingCourseSection != null){
-            CourseSection updatedCourseSection = toModel(courseSectionDTO);
-            updatedCourseSection.setSectionId(id);
-            updatedCourseSection = courseSectionRepo.save(updatedCourseSection);
-            return toDTO(updatedCourseSection);
+        if (existingCourseSection != null) {
+            updateCourseSectionModel(existingCourseSection, courseSectionDTO);
+            existingCourseSection = courseSectionRepo.save(existingCourseSection);
+            return toDTO(existingCourseSection);
         } else {
             throw new IllegalArgumentException("Course section not found: " + id);
         }
     }
 
-    public CourseSectionDTO updateCourseSection(CourseSectionDTO courseSectionDTO){
+    public CourseSectionDTO updateCourseSection(CourseSectionDTO courseSectionDTO) {
         CourseSection existingCourseSection = courseSectionRepo.findById(courseSectionDTO.getSectionId()).orElse(null);
-        if (existingCourseSection != null){
-            CourseSection updatedCourseSection = toModel(courseSectionDTO);
-            updatedCourseSection = courseSectionRepo.save(updatedCourseSection);
-            return toDTO(updatedCourseSection);
+        if (existingCourseSection != null) {
+            updateCourseSectionModel(existingCourseSection, courseSectionDTO);
+            existingCourseSection = courseSectionRepo.save(existingCourseSection);
+            return toDTO(existingCourseSection);
         } else {
             throw new IllegalArgumentException("Course section not found: " + courseSectionDTO.getSectionId());
         }
     }
 
-    public List<CourseSectionDTO> findByCourseId(Long courseId){
+    private void updateCourseSectionModel(CourseSection existingCourseSection, CourseSectionDTO courseSectionDTO) {
+        existingCourseSection.setSectionName(courseSectionDTO.getSectionName());
+        existingCourseSection.setDescription(courseSectionDTO.getDescription());
+
+        // Handle section contents update
+        updateSectionContents(existingCourseSection, courseSectionDTO.getContents());
+    }
+
+    private void updateSectionContents(CourseSection section, List<SectionContentDTO> contentDTOs) {
+        Map<Long, SectionContent> existingContentsMap = section.getContents().stream()
+                .collect(Collectors.toMap(SectionContent::getContentId, content -> content));
+
+        List<SectionContent> updatedContents = new ArrayList<>();
+
+        for (SectionContentDTO contentDTO : contentDTOs) {
+            SectionContent content = existingContentsMap.getOrDefault(contentDTO.getContentId(), new SectionContent());
+            content.setTitle(contentDTO.getTitle());
+            content.setType(contentDTO.getType());
+            content.setDuration(contentDTO.getDuration());
+            content.setDescription(contentDTO.getDescription());
+            content.setUrl(contentDTO.getUrl());
+            content.setSection(section);
+            updatedContents.add(content);
+        }
+
+        section.getContents().clear();
+        section.getContents().addAll(updatedContents);
+    }
+
+    public List<CourseSectionDTO> findByCourseId(Long courseId) {
         List<CourseSection> courseSections = courseSectionRepo.findByCourseId(courseId);
         return courseSections.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public CourseSectionDTO toDTO(CourseSection courseSection){
-        return  CourseSectionDTO.builder()
+    public CourseSectionDTO toDTO(CourseSection courseSection) {
+        return CourseSectionDTO.builder()
                 .sectionId(courseSection.getSectionId())
                 .sectionName(courseSection.getSectionName())
                 .description(courseSection.getDescription())
@@ -107,5 +139,4 @@ public class CourseSectionDAO {
         }
         return section;
     }
-
 }

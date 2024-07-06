@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavbarDynamic from "../../components/navbar/NavbarDynamic";
 import CourseCard from "../../components/courses/CourseCard";
-import Footer from "../../components/footer/Fotter";
+import Fotter from "../../components/footer/Fotter";
 import CourseProfileCard from "../../components/courses/CourseProfileCard";
 import RequestNewCourse from "../../components/courses/RequestNewCourse";
 
@@ -131,7 +131,7 @@ const UserDashboardPage = () => {
           </div>
 
           {/* Footer Section */}
-          <Footer />
+          <Fotter />
         </div>
       </div>
     </div>

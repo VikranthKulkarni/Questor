@@ -6,7 +6,8 @@ import ProjectBoardSideBar from "../../components/SideBar/ProjectBoardSideBar";
 import ProjectUpdates from "../../components/ProjectSidePages/ProjectUpdates";
 import HowToUse from "../../components/ProjectSidePages/HowToUse";
 import TermsAndConditions from "../../components/ProjectSidePages/TermsAndConditions";
-import Fotter from "../../components/footer/Fotter";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProjectLandingPage = () => {
   const { projectId } = useParams();
@@ -32,9 +33,10 @@ const ProjectLandingPage = () => {
       .then((data) => {
         setProject(data);
         setIsLoading(false);
+        toast.success("Project details loaded successfully!");
       })
       .catch((error) => {
-        alert("Failed to fetch project details: " + error);
+        toast.error("Failed to fetch project details: " + error);
         setIsLoading(false);
       });
   }, [projectId]);
@@ -75,7 +77,7 @@ const ProjectLandingPage = () => {
         isOpen={isTermsOpen}
         onClose={() => setIsTermsOpen(false)}
       />
-      <Fotter/>
+      <ToastContainer />
     </div>
   );
 };

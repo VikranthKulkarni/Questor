@@ -21,6 +21,10 @@ public class TransactionService {
         return transactionDAO.findTotalAmountInLastThreeMonths();
     }
 
+    public List<TransactionDTO> getRevenueDataByMonth() {
+        return transactionDAO.getRevenueDataByMonth();
+    }
+
     public TransactionDTO saveTransaction(TransactionDTO transactionDTO) {
         return transactionDAO.saveTransaction(transactionDTO);
     }

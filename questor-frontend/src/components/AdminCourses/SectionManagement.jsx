@@ -61,9 +61,9 @@ const SectionManagement = ({ courseId, onSectionClick }) => {
 
   const handleSaveSection = () => {
     const endpoint = selectedSection.sectionId
-      ? `/questor/sections/updateSection`
+      ? `/questor/sections/updateSectionById/${selectedSection.sectionId}`
       : "/questor/sections/addSection";
-    const method = "POST";
+    const method = selectedSection.sectionId ? "PUT" : "POST";
 
     fetch(`http://localhost:8080${endpoint}`, {
       method: method,

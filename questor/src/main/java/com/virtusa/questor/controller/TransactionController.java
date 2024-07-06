@@ -17,6 +17,12 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    @GetMapping("/revenueData")
+    public ResponseEntity<List<TransactionDTO>> getRevenueDataByMonth() {
+        List<TransactionDTO> revenueData = transactionService.getRevenueDataByMonth();
+        return new ResponseEntity<>(revenueData, HttpStatus.OK);
+    }
+
     @GetMapping("/totalRevenue")
     public Double totalRevenue(){
         return transactionService.findTotalAmount();
