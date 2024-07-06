@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserIcon } from "@heroicons/react/solid";
+import { UserIcon, MenuIcon, XIcon } from "@heroicons/react/solid";
 
 const NavbarDynamic = ({ links }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -37,14 +38,16 @@ const NavbarDynamic = ({ links }) => {
   }, []);
 
   const handleLogout = () => {
-    // Clear session storage
     sessionStorage.clear();
-    // Navigate to the home page or login page after logout
     navigate("/");
   };
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
   return (
@@ -53,16 +56,20 @@ const NavbarDynamic = ({ links }) => {
         isScrolled ? "shadow-md" : ""
       }`}
     >
-      <Link to="/" className="text-white text-2xl font-bold" style={{textDecoration:'none'}}>
+      <Link
+        to="/"
+        className="text-white text-2xl font-bold"
+        style={{ textDecoration: "none" }}
+      >
         Questor
       </Link>
-      <div className="flex space-x-4" >
+      <div className="hidden md:flex space-x-4">
         {links.map((link, index) => (
           <Link
             key={index}
             to={link.url}
             className="text-white px-4 py-2 rounded-md"
-            style={{textDecoration:'none'}}
+            style={{ textDecoration: "none" }}
           >
             {link.name}
           </Link>
@@ -71,7 +78,7 @@ const NavbarDynamic = ({ links }) => {
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={toggleDropdown}
-          className="flex items-center space-x-2"
+          className="hidden md:flex items-center space-x-2"
         >
           <UserIcon className="w-8 h-8 text-white" />
         </button>
@@ -80,7 +87,7 @@ const NavbarDynamic = ({ links }) => {
             <Link
               to={`/profile/${sessionStorage.getItem("userId")}`}
               className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              style={{textDecoration:'none'}}
+              style={{ textDecoration: "none" }}
             >
               Profile
             </Link>
@@ -93,6 +100,55 @@ const NavbarDynamic = ({ links }) => {
           </div>
         )}
       </div>
+      <div className="md:hidden">
+        <button onClick={toggleMenu}>
+          {menuOpen ? (
+            <XIcon className="w-8 h-8 text-white" />
+          ) : (
+            <MenuIcon className="w-8 h-8 text-white" />
+          )}
+        </button>
+      </div>
+      {menuOpen && (
+        <div className="md:hidden absolute top-16 left-0 w-full bg-gray-700 text-white flex flex-col items-center space-y-4 py-4 z-10">
+          {links.map((link, index) => (
+            <Link
+              key={index}
+              to={link.url}
+              className="text-white px-4 py-2 rounded-md"
+              style={{ textDecoration: "none" }}
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={toggleDropdown}
+              className="flex items-center space-x-2"
+            >
+              <UserIcon className="w-8 h-8 text-white" />
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                <Link
+                  to={`/profile/${sessionStorage.getItem("userId")}`}
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                  style={{ textDecoration: "none" }}
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

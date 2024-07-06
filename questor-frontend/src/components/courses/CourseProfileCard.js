@@ -27,11 +27,8 @@ const CourseProfileCard = () => {
   };
 
   return (
-    <div
-      className="bg-gray-700 p-8 rounded-xl text-left w-full flex flex-col md:flex-row"
-      style={{ height: "200px" }}
-    >
-      <div className="flex items-center mb-4 md:mb-0 md:mr-4">
+    <div className="bg-gray-700 p-4 rounded-xl text-left w-full flex flex-wrap items-center">
+      <div className="flex-shrink-0 flex items-center mb-4 md:mb-0 md:mr-4">
         <div className="bg-black rounded-full w-16 h-16 flex items-center justify-center">
           <img
             src={
@@ -44,21 +41,21 @@ const CourseProfileCard = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col justify-between w-full items-center mt-6">
-        <div className="flex justify-between items-center w-full">
-          <div>
-            <h1 className="text-xl font-bold text-white">
-              {user.firstName} {user.lastName}
-            </h1>
-            <p className="text-gray-300">@{user.userName}</p>
-          </div>
-          <button
-            className="bg-black text-white py-2 px-4 rounded-full"
-            onClick={handleProfileClick}
-          >
-            Profile
-          </button>
-        </div>
+      <div className="flex flex-col flex-grow justify-between w-full items-center md:items-start mb-4 md:mb-0">
+        <h1 className="text-lg md:text-xl font-bold text-white text-center md:text-left truncate w-full overflow-hidden">
+          {user.firstName} {user.lastName}
+        </h1>
+        <p className="text-gray-300 text-center md:text-left truncate w-full overflow-hidden">
+          @{user.userName}
+        </p>
+      </div>
+      <div className="flex justify-center w-full md:w-auto">
+        <button
+          className="bg-black text-white py-2 px-4 rounded-full"
+          onClick={handleProfileClick}
+        >
+          Profile
+        </button>
       </div>
     </div>
   );

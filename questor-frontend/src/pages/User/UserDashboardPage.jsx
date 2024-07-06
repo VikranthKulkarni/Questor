@@ -56,11 +56,14 @@ const UserDashboardPage = () => {
     { name: "Project Portal", url: `/projects/${userId}` },
     { name: "Wishlist", url: `/wishlist/${userId}` },
     { name: "Contact Us", url: "/contactUs" },
+    { name: "My Requests", url: `/userRequests/${userId}` }
   ];
 
   return (
     <div className="bg-black min-h-screen flex flex-col text-white">
-      <NavbarDynamic links={navbarLinks} />
+      <div style={{ zIndex: "9999999" }}>
+        <NavbarDynamic links={navbarLinks} />
+      </div>
       <div className="flex-grow w-full flex justify-center items-center mt-32">
         <div className="mx-auto w-3/4">
           <div className="flex flex-col md:flex-row justify-center items-center mb-8 space-y-4 md:space-y-0 md:space-x-4">

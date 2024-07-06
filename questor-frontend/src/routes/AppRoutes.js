@@ -15,6 +15,7 @@ import PublicRoute from "../components/Routes/PublicRoute";
 import WishlistPage from "../pages/User/WishlistPage";
 import PricingPage from "../pages/User/PricingPage";
 import PaymentPage from "../pages/User/PaymentPage";
+import UserRequestsPage from "../pages/User/UserRequestsPage";
 
 const AppRoutes = () => {
   return (
@@ -97,6 +98,8 @@ const AppRoutes = () => {
             <PrivateRoute element={WishlistPage} allowedRoles={["isUser"]} />
           }
         />
+
+        <Route path = "/userRequests/:userId" element = {<PrivateRoute element={UserRequestsPage} allowedRoles={["isUser"]}/>}/>
 
         {/* Admin Routes */}
         <Route

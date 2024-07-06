@@ -54,4 +54,7 @@ public class User {
 //    @JoinColumn(name = "wishlist_id")
     private Wishlist wishlist;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseRequest> courseRequests;
+
 }

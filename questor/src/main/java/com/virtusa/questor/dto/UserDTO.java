@@ -23,5 +23,6 @@ public class UserDTO {
     private String phoneNumber;
     private List<ProjectDTO> projects;
     private WishlistDTO wishlist;
+    private List<CourseRequestDTO> courseRequests;
 
 }

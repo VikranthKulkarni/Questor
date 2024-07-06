@@ -24,6 +24,7 @@ const ProjectLandingPage = () => {
     { name: "Project Portal", url: `/projects/${userId}` },
     { name: "Wishlist", url: `/wishlist/${userId}` },
     { name: "Contact Us", url: "/contactUs" },
+    { name: "My Requests", url: `/userRequests/${userId}` },
   ];
 
   useEffect(() => {

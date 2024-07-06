@@ -9,6 +9,7 @@ import AdminSidebar from "../../components/SideBar/AdminSideBar";
 import AdminSubscriptionManagement from "./AdminSubscriptionManagement";
 import AdminTransactionManagement from "./AdminTransactionManagement";
 import AdminGreeting from "../../components/AdminGreeting/AdminGreeting";
+import AdminCourseRequestManagement from "./AdminCourseRequestManagement";
 import { PieChart, Pie, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const AdminDashboard = () => {
@@ -97,6 +98,8 @@ const AdminDashboard = () => {
         return <AdminSubscriptionManagement />;
       case "transactionManagement":
         return <AdminTransactionManagement />;
+      case "courseRequestManagement":
+        return <AdminCourseRequestManagement />;
       case "profile":
         return <AdminProfilePage />;
       case "dashboard":
@@ -121,7 +124,9 @@ const AdminDashboard = () => {
               </div>
               <div className="bg-gray-700 p-4 rounded-lg shadow-lg">
                 <h3 className="text-lg font-bold">Revenue in Last 3 Months</h3>
-                <p className="text-4xl">${totalAmountLastThreeMonths.toFixed(2)}</p>
+                <p className="text-4xl">
+                  ${totalAmountLastThreeMonths.toFixed(2)}
+                </p>
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
@@ -157,7 +162,16 @@ const AdminDashboard = () => {
                 <h3 className="text-lg font-bold">Courses Chart</h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
-                    <Pie dataKey="value" isAnimationActive={false} data={courseData} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label />
+                    <Pie
+                      dataKey="value"
+                      isAnimationActive={false}
+                      data={courseData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      label
+                    />
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>

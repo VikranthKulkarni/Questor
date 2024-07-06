@@ -11,6 +11,7 @@ import {
   ChatAltIcon,
   CalendarIcon,
   LinkIcon,
+  ClipboardCheckIcon,
 } from "@heroicons/react/solid";
 
 const AdminSidebar = ({ setActiveSection }) => {
@@ -80,6 +81,15 @@ const AdminSidebar = ({ setActiveSection }) => {
           <CreditCardIcon className="w-6 h-6 text-white" />
           <span>Manage Transactions</span>
         </button>
+
+        <button
+          onClick={() => setActiveSection("courseRequestManagement")}
+          className="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg w-full"
+        >
+          <ClipboardCheckIcon className="w-6 h-6 text-white" />
+          <span>Manage Course Requests</span>
+        </button>
+
         <button
           onClick={() => setActiveSection("profile")}
           className="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg w-full"
