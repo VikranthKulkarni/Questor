@@ -1,5 +1,7 @@
 package com.virtusa.questor.dto;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.util.Date;
@@ -21,8 +23,20 @@ public class UserDTO {
     private String bio;
     private byte[] imageData;
     private String phoneNumber;
+
+    private Date createdDate;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
+
+
     private List<ProjectDTO> projects;
     private WishlistDTO wishlist;
     private List<CourseRequestDTO> courseRequests;
+
+    public enum UserStatus {
+        BLOCK, UNBLOCK
+    }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,11 +110,13 @@ public class UserDAO {
                 .bio(user.getBio())
                 .phoneNumber(user.getPhoneNumber())
                 .imageData(user.getImageData())
+                .createdDate(user.getCreatedDate())
+                .userStatus(toDTOUserStatus(user.getUserStatus()))
                 .build();
     }
 
     public User toModel(UserDTO userDTO){
-        return User.builder()
+        User user =  User.builder()
                 .userId(userDTO.getUserId())
                 .userName(userDTO.getUserName())
                 .firstName(userDTO.getFirstName())
@@ -124,6 +127,35 @@ public class UserDAO {
                 .bio(userDTO.getBio())
                 .imageData(userDTO.getImageData())
                 .phoneNumber(userDTO.getPhoneNumber())
+//                .createdDate(userDTO.getCreatedDate())
+                .userStatus(toModelUserStatus(userDTO.getUserStatus()))
                 .build();
+
+        // Set createdDate only if it's not already set
+        if (user.getCreatedDate() == null) {
+            user.setCreatedDate(new Date());
+        }
+        return user;
     }
+
+    public UserDTO.UserStatus toDTOUserStatus(User.UserStatus userStatus){
+        if (userStatus == null){
+            return null;
+        }
+        return switch (userStatus) {
+            case BLOCK -> UserDTO.UserStatus.BLOCK;
+            case UNBLOCK -> UserDTO.UserStatus.UNBLOCK;
+        };
+    }
+
+    public User.UserStatus toModelUserStatus(UserDTO.UserStatus userStatus){
+        if (userStatus == null){
+            return null;
+        }
+        return switch (userStatus) {
+            case BLOCK -> User.UserStatus.BLOCK;
+            case UNBLOCK -> User.UserStatus.UNBLOCK;
+        };
+    }
+
 }

@@ -54,7 +54,9 @@ const WishlistPage = () => {
 
   return (
     <div className="bg-black min-h-screen text-white">
-      <NavbarDynamic links={navbarLinks} />
+      <div style={{ zIndex: "9999999" }}>
+        <NavbarDynamic links={navbarLinks} />
+      </div>
       <div className="pt-32 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <header className="bg-gray-900 shadow mb-4 rounded-xl">
           <div className="px-4 py-6 sm:px-6 lg:px-8 ">

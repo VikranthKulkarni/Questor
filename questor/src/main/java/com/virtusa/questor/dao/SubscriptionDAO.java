@@ -95,7 +95,7 @@ public class SubscriptionDAO {
         if (transactionDTOs != null && !transactionDTOs.isEmpty()) {
             List<Transaction> newTransactions = transactionDTOs.stream()
                     .map(transactionDAO::toModel)
-                    .collect(Collectors.toList());
+                    .toList();
 
             existingSubscription.getTransactions().addAll(newTransactions);
         }

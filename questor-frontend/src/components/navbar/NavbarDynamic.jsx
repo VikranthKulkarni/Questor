@@ -54,7 +54,7 @@ const NavbarDynamic = ({ links }) => {
     <nav
       className={`bg-opacity-100 bg-gray-700 rounded-2xl shadow-lg fixed top-5 left-1/2 transform -translate-x-1/2 w-11/12 flex justify-between items-center p-4 ${
         isScrolled ? "shadow-md" : ""
-      }`}
+      } transition-all duration-300`}
     >
       <Link
         to="/"
@@ -68,85 +68,62 @@ const NavbarDynamic = ({ links }) => {
           <Link
             key={index}
             to={link.url}
-            className="text-white px-4 py-2 rounded-md"
+            className="text-white px-4 py-2 rounded-md hover:bg-white hover:bg-opacity-20 transition duration-300"
             style={{ textDecoration: "none" }}
           >
             {link.name}
           </Link>
         ))}
       </div>
+      <div className="flex md:hidden items-center">
+        <button
+          onClick={toggleMenu}
+          className="text-white focus:outline-none focus:ring-2 focus:ring-white rounded-md"
+        >
+          {menuOpen ? (
+            <XIcon className="w-8 h-8 transition-transform transform hover:scale-110" />
+          ) : (
+            <MenuIcon className="w-8 h-8 transition-transform transform hover:scale-110" />
+          )}
+        </button>
+      </div>
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={toggleDropdown}
-          className="hidden md:flex items-center space-x-2"
+          className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-white rounded-md"
         >
-          <UserIcon className="w-8 h-8 text-white" />
+          <UserIcon className="w-8 h-8 text-white transition-transform transform hover:scale-110" />
         </button>
         {dropdownOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
             <Link
               to={`/profile/${sessionStorage.getItem("userId")}`}
-              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300"
               style={{ textDecoration: "none" }}
             >
               Profile
             </Link>
             <button
               onClick={handleLogout}
-              className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+              className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300"
             >
               Logout
             </button>
           </div>
         )}
       </div>
-      <div className="md:hidden">
-        <button onClick={toggleMenu}>
-          {menuOpen ? (
-            <XIcon className="w-8 h-8 text-white" />
-          ) : (
-            <MenuIcon className="w-8 h-8 text-white" />
-          )}
-        </button>
-      </div>
       {menuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-gray-700 text-white flex flex-col items-center space-y-4 py-4 z-10">
+        <div className="absolute top-16 left-0 w-full bg-gray-700 rounded-md shadow-lg z-10 md:hidden">
           {links.map((link, index) => (
             <Link
               key={index}
               to={link.url}
-              className="text-white px-4 py-2 rounded-md"
+              className="block text-white px-4 py-2 rounded-md hover:bg-white hover:bg-opacity-20 transition duration-300"
               style={{ textDecoration: "none" }}
-              onClick={() => setMenuOpen(false)}
             >
               {link.name}
             </Link>
           ))}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center space-x-2"
-            >
-              <UserIcon className="w-8 h-8 text-white" />
-            </button>
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                <Link
-                  to={`/profile/${sessionStorage.getItem("userId")}`}
-                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  style={{ textDecoration: "none" }}
-                >
-                  Profile
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </nav>

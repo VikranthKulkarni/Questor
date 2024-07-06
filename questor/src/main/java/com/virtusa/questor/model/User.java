@@ -47,6 +47,14 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", nullable = false, updatable = false)
+    private Date createdDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_status", nullable = false)
+    private UserStatus userStatus;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
 
@@ -56,5 +64,18 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseRequest> courseRequests;
+
+
+    public enum UserStatus {
+        BLOCK, UNBLOCK
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdDate = new Date();
+        if (userStatus == null){
+            userStatus = UserStatus.UNBLOCK;
+        }
+    }
 
 }
