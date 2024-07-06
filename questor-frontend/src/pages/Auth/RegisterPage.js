@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState('');
@@ -16,6 +18,7 @@ const RegisterPage = () => {
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
@@ -25,7 +28,7 @@ const RegisterPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName,userName, email, password }),
+        body: JSON.stringify({ firstName, lastName, userName, email, password }),
       });
 
       if (!response.ok) {
@@ -35,10 +38,12 @@ const RegisterPage = () => {
 
       const user = await response.json();
       console.log('Registered user:', user);
+      toast.success('Registration successful!');
       // Redirect to the login page or dashboard
       navigate('/');
     } catch (error) {
-      setError(error.message);
+      // setError(error.message);
+      toast.error('Registration failed: ' + error.message);
     }
   };
 
@@ -130,6 +135,7 @@ const RegisterPage = () => {
       </div>
       <div className="circle circle1 bg-gray-700"></div>
       <div className="circle circle2 bg-gray-500"></div>
+      <ToastContainer />
     </div>
   );
 };

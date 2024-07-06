@@ -53,15 +53,16 @@ const NavbarDynamic = ({ links }) => {
         isScrolled ? "shadow-md" : ""
       }`}
     >
-      <Link to="/" className="text-white text-2xl font-bold">
+      <Link to="/" className="text-white text-2xl font-bold" style={{textDecoration:'none'}}>
         Questor
       </Link>
-      <div className="flex space-x-4">
+      <div className="flex space-x-4" >
         {links.map((link, index) => (
           <Link
             key={index}
             to={link.url}
             className="text-white px-4 py-2 rounded-md"
+            style={{textDecoration:'none'}}
           >
             {link.name}
           </Link>
@@ -79,6 +80,7 @@ const NavbarDynamic = ({ links }) => {
             <Link
               to={`/profile/${sessionStorage.getItem("userId")}`}
               className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              style={{textDecoration:'none'}}
             >
               Profile
             </Link>

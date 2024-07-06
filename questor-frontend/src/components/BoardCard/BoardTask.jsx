@@ -7,7 +7,7 @@ const BoardTask = ({ task, handleDragStart, handleDeleteTask, openEditModal }) =
 
     const handleEditModalOpen = () => {
         setIsEditModalOpen(true);
-        setEditedTask({ ...task });
+        setEditedTask({ ...task }); // Ensure edited task is initialized with current task data
     };
 
     const handleEditModalClose = () => {

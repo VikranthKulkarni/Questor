@@ -57,7 +57,9 @@ const ContactUsPage = () => {
  
   return (
     <div className="bg-black min-h-screen flex flex-col text-white relative items-center">
+    <div style={{zIndex:'9999999'}}>
       <NavbarDynamic links={navbarLinks}/>
+    </div>
       <div className="w-3/4 p-8 mt-28">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold">Contact Us</h1>
@@ -87,6 +89,7 @@ const ContactUsPage = () => {
             </div>
             <img src="/images/contact.png" alt="Contact" className="absolute top-40 right-16 w-44 h-48"/>
             <img src="/images/contactbelow.png" alt="Contact" className="relative  left-4 w-48 h-40 mt-16"/>
+           
           </div>
           <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full lg:w-1/2">
             <form onSubmit={handleSubmit} className="space-y-6">

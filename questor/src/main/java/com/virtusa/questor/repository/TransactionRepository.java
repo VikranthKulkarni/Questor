@@ -23,4 +23,9 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     @Query("select sum(t.amount) from Transaction t where t.paymentDate >= :startDate")
     Double findTotalAmountInLastThreeMonths(Date startDate);
 
+    @Query("SELECT FUNCTION('DATE_FORMAT', t.paymentDate, '%Y-%m') as month, SUM(t.amount) as revenue " +
+            "FROM Transaction t " +
+            "GROUP BY FUNCTION('DATE_FORMAT', t.paymentDate, '%Y-%m')")
+    List<Object[]> findRevenueDataByMonth();
+
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavbarDynamic from "../../components/navbar/NavbarDynamic";
 import WishlistCard from "../../components/courses/WishlistCard";
-import Fotter from "../../components/footer/Fotter";
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -77,7 +76,6 @@ const WishlistPage = () => {
           </div>
         </main>
       </div>
-      <Fotter/>
     </div>
   );
 };

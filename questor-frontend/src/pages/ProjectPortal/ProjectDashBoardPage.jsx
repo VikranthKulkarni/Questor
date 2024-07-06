@@ -6,7 +6,9 @@ import ProjectBoardSideBar from "../../components/SideBar/ProjectBoardSideBar";
 import ProjectUpdates from "../../components/ProjectSidePages/ProjectUpdates";
 import HowToUse from "../../components/ProjectSidePages/HowToUse";
 import TermsAndConditions from "../../components/ProjectSidePages/TermsAndConditions";
-import Fotter from "../../components/footer/Fotter";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../components/Toast/toastStyles.css"; // Import the custom CSS file
 
 const ProjectDashBoardPage = () => {
   const userId = sessionStorage.getItem("userId");
@@ -24,6 +26,9 @@ const ProjectDashBoardPage = () => {
   const [isUpdatesOpen, setIsUpdatesOpen] = useState(false);
   const [isHowToUseOpen, setIsHowToUseOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteProjectId, setDeleteProjectId] = useState(null);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState("");
 
   const navbarLinks = [
     { name: "Home", url: "/userDashboard" },
@@ -40,7 +45,9 @@ const ProjectDashBoardPage = () => {
     fetch(`http://localhost:8080/questor/projects/user/${userId}`)
       .then((response) => response.json())
       .then((data) => setProjects(data))
-      .catch((error) => alert("Failed to fetch projects:" + error));
+      .catch((error) => toast.error("Failed to fetch projects: " + error, {
+        className: "custom-toast",
+      }));
   };
 
   const handleCreateProject = () => {
@@ -54,8 +61,13 @@ const ProjectDashBoardPage = () => {
         setProjects([...projects, createdProject]);
         setIsModalOpen(false);
         resetForm();
+        toast.success("Project created successfully", {
+          className: "custom-toast",
+        });
       })
-      .catch((error) => alert("Failed to create project: " + error));
+      .catch((error) => toast.error("Failed to create project: " + error, {
+        className: "custom-toast",
+      }));
   };
 
   const handleUpdateProject = () => {
@@ -72,21 +84,44 @@ const ProjectDashBoardPage = () => {
         setProjects(updatedProjects);
         setIsModalOpen(false);
         resetForm();
+        toast.success("Project updated successfully", {
+          className: "custom-toast",
+        });
       })
-      .catch((error) => alert("Failed to update project: " + error));
+      .catch((error) => toast.error("Failed to update project: " + error, {
+        className: "custom-toast",
+      }));
   };
 
   const handleDeleteProject = (projectId) => {
-    fetch(`http://localhost:8080/questor/projects/${projectId}`, {
-      method: "DELETE",
-    })
-      .then(() => {
-        const updatedProjects = projects.filter(
-          (project) => project.projectId !== projectId
-        );
-        setProjects(updatedProjects);
+    setDeleteProjectId(projectId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteProject = () => {
+    if (deleteConfirmationText === "YES") {
+      fetch(`http://localhost:8080/questor/projects/${deleteProjectId}`, {
+        method: "DELETE",
       })
-      .catch((error) => alert("Failed to delete project: " + error));
+        .then(() => {
+          const updatedProjects = projects.filter(
+            (project) => project.projectId !== deleteProjectId
+          );
+          setProjects(updatedProjects);
+          setIsDeleteModalOpen(false);
+          setDeleteConfirmationText("");
+          toast.success("Your project has been deleted", {
+            className: "custom-toast custom-toast-success",
+          });
+        })
+        .catch((error) => toast.error("Failed to delete project: " + error, {
+          className: "custom-toast",
+        }));
+    } else {
+      toast.error("You must type 'YES' to confirm.", {
+        className: "custom-toast",
+      });
+    }
   };
 
   const resetForm = () => {
@@ -256,6 +291,40 @@ const ProjectDashBoardPage = () => {
           </div>
         </div>
       )}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md">
+            <h3 className="text-2xl font-bold mb-4">Confirm Delete</h3>
+            <p className="mb-4">
+              Type "YES" below to confirm you want to delete this project.
+            </p>
+            <input
+              type="text"
+              value={deleteConfirmationText}
+              onChange={(e) => setDeleteConfirmationText(e.target.value)}
+              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 mb-4"
+              placeholder='Type "YES" to confirm'
+            />
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setDeleteConfirmationText("");
+                }}
+                className="bg-gray-600 text-white py-2 px-4 rounded-full"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteProject}
+                className="bg-red-600 text-white py-2 px-4 rounded-full"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <ProjectUpdates
         isOpen={isUpdatesOpen}
         onClose={() => setIsUpdatesOpen(false)}
@@ -268,7 +337,10 @@ const ProjectDashBoardPage = () => {
         isOpen={isTermsOpen}
         onClose={() => setIsTermsOpen(false)}
       />
-      <Fotter/>
+      <ToastContainer
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-container"
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import com.virtusa.questor.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,11 +27,33 @@ public class TransactionDAO {
         return transactionRepository.findTotalAmount();
     }
 
+
     public Double findTotalAmountInLastThreeMonths(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -3);
         Date threeMonthsAgo = calendar.getTime();
         return transactionRepository.findTotalAmountInLastThreeMonths(threeMonthsAgo);
+    }
+
+
+    public List<TransactionDTO> getRevenueDataByMonth() {
+        List<Object[]> results = transactionRepository.findRevenueDataByMonth();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+
+        return results.stream()
+                .map(result -> TransactionDTO.builder()
+                        .paymentDate(parseDate(result[0].toString(), dateFormat))
+                        .amount((Double) result[1])
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private Date parseDate(String dateStr, SimpleDateFormat dateFormat) {
+        try {
+            return dateFormat.parse(dateStr);
+        } catch (Exception e) {
+            throw new RuntimeException("Error parsing date: " + dateStr, e);
+        }
     }
 
     public TransactionDTO saveTransaction(TransactionDTO transactionDTO){

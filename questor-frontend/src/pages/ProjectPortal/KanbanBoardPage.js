@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Board from '../../components/Board/Board';
 import { PlusIcon } from '@heroicons/react/solid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function KanbanBoardPage() {
     const { projectId } = useParams();
@@ -25,7 +27,7 @@ function KanbanBoardPage() {
                     fetchTasksForBoard(board.boardId);
                 });
             })
-            .catch(error => alert('Failed to fetch boards: ' + error));
+            .catch(error => console.error('Failed to fetch boards: ' + error));
     };
 
     const fetchTasksForBoard = (boardId) => {
@@ -36,12 +38,12 @@ function KanbanBoardPage() {
                     b.boardId === boardId ? { ...b, tasks } : b
                 ));
             })
-            .catch(error => alert('Failed to fetch tasks for board: ' + boardId + ' Error: ' + error));
+            .catch(error => console.error('Failed to fetch tasks for board: ' + boardId + ' Error: ' + error));
     };
 
     const handleCreateBoard = () => {
         if (newBoardName.trim() === '') {
-            alert('Board name cannot be empty');
+            toast.error('Board name cannot be empty');
             return;
         }
 
@@ -60,8 +62,9 @@ function KanbanBoardPage() {
             setBoards([...boards, createdBoard]);
             setIsModalOpen(false);
             setNewBoardName('');
+            toast.success('Board created successfully');
         })
-        .catch(error => alert('Failed to create board: ' + error));
+        .catch(error => toast.error('Failed to create board: ' + error));
     };
 
     const handleDragStart = (e, taskId) => {
@@ -90,10 +93,10 @@ function KanbanBoardPage() {
                 });
             })
             .then(() => {
-                console.log('Task updated');
                 fetchBoards();
+                toast.success('Task updated successfully');
             })
-            .catch(error => alert('Failed to update task: ' + error));
+            .catch(error => toast.error('Failed to update task: ' + error));
     };
 
     const openTaskModal = (boardId) => {
@@ -103,7 +106,7 @@ function KanbanBoardPage() {
 
     const handleCreateTask = () => {
         if (newTask.name.trim() === '') {
-            alert('Task name cannot be empty');
+            toast.error('Task name cannot be empty');
             return;
         }
 
@@ -117,8 +120,9 @@ function KanbanBoardPage() {
             fetchTasksForBoard(newTask.boardId);
             setIsTaskModalOpen(false);
             setNewTask({ name: '', description: '', dueDate: '', priority: 'LOW', boardId: null });
+            toast.success('Task created successfully');
         })
-        .catch(error => alert('Failed to create task: ' + error));
+        .catch(error => toast.error('Failed to create task: ' + error));
     };
 
     const handleDeleteTask = (taskId) => {
@@ -126,10 +130,10 @@ function KanbanBoardPage() {
             method: 'DELETE',
         })
         .then(() => {
-            console.log('Task deleted');
             fetchBoards();
+            toast.success('Task deleted successfully');
         })
-        .catch(error => alert('Failed to delete task: ' + error));
+        .catch(error => toast.error('Failed to delete task: ' + error));
     };
 
     const handleDeleteBoard = (boardId) => {
@@ -137,10 +141,10 @@ function KanbanBoardPage() {
             method: 'DELETE',
         })
         .then(() => {
-            console.log('Board deleted');
             setBoards(boards.filter(board => board.boardId !== boardId));
+            toast.success('Board deleted successfully');
         })
-        .catch(error => alert('Failed to delete board: ' + error));
+        .catch(error => toast.error('Failed to delete board: ' + error));
     };
 
     return (
@@ -233,6 +237,7 @@ function KanbanBoardPage() {
                     </div>
                 </div>
             )}
+            <ToastContainer />
         </div>
     );
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import NavbarDynamic from "../../components/navbar/NavbarDynamic";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import Fotter from "../../components/footer/Fotter";
 
 const CourseViewPage = () => {
   const { courseId } = useParams();
@@ -233,7 +232,6 @@ const CourseViewPage = () => {
               </div>
             </div>
           )}
-      <Fotter/>
         </div>
       </div>
     </div>
