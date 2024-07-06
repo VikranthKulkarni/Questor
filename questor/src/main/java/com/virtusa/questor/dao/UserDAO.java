@@ -39,15 +39,15 @@ public class UserDAO {
         return userModel != null ? toDTO(userModel) : null;
     }
 
-    public List<UserDTO> findAll(){
+    public List<UserDTO> findAll() {
         List<User> users = userRepo.findAll();
         return users.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public UserDTO updateById(Long id, UserDTO userDTO){
+    public UserDTO updateById(Long id, UserDTO userDTO) {
         User existingUser = userRepo.findById(id).orElse(null);
-        if (existingUser != null){
-            updateUserDetails(existingUser, userDTO);
+        if (existingUser != null) {
+            updateUserDetails(existingUser, userDTO, false);
             existingUser = userRepo.save(existingUser);
             return toDTO(existingUser);
         } else {
@@ -55,10 +55,10 @@ public class UserDAO {
         }
     }
 
-    public UserDTO update(UserDTO userDTO){
+    public UserDTO update(UserDTO userDTO) {
         User existingUser = userRepo.findById(userDTO.getUserId()).orElse(null);
-        if (existingUser != null){
-            updateUserDetails(existingUser, userDTO);
+        if (existingUser != null) {
+            updateUserDetails(existingUser, userDTO, false);
             existingUser = userRepo.save(existingUser);
             return toDTO(existingUser);
         } else {
@@ -66,7 +66,7 @@ public class UserDAO {
         }
     }
 
-    public void deleteByID(Long id){
+    public void deleteByID(Long id) {
         User user = userRepo.findById(id).orElse(null);
         if (user != null) {
             userRepo.delete(user);
@@ -84,7 +84,7 @@ public class UserDAO {
         return userRepo.findByUserName(userName).map(this::toDTO).orElseThrow(() -> new RuntimeException("User not found with username: " + userName));
     }
 
-    private void updateUserDetails(User existingUser, UserDTO userDTO) {
+    private void updateUserDetails(User existingUser, UserDTO userDTO, boolean updatePassword) {
         existingUser.setFirstName(userDTO.getFirstName());
         existingUser.setLastName(userDTO.getLastName());
         existingUser.setUserName(userDTO.getUserName());
@@ -93,12 +93,19 @@ public class UserDAO {
         existingUser.setBio(userDTO.getBio());
         existingUser.setDob(userDTO.getDob());
         existingUser.setImageData(userDTO.getImageData());
-        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()){
+
+        if (userDTO.getUserStatus() != null) {
+            existingUser.setUserStatus(toModelUserStatus(userDTO.getUserStatus()));
+        }
+
+        // Only update password if it is provided and not empty
+        if (updatePassword && userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
+
     }
 
-    public UserDTO toDTO(User user){
+    public UserDTO toDTO(User user) {
         return UserDTO.builder()
                 .userId(user.getUserId())
                 .userName(user.getUserName())
@@ -115,8 +122,8 @@ public class UserDAO {
                 .build();
     }
 
-    public User toModel(UserDTO userDTO){
-        User user =  User.builder()
+    public User toModel(UserDTO userDTO) {
+        User user = User.builder()
                 .userId(userDTO.getUserId())
                 .userName(userDTO.getUserName())
                 .firstName(userDTO.getFirstName())
@@ -127,7 +134,6 @@ public class UserDAO {
                 .bio(userDTO.getBio())
                 .imageData(userDTO.getImageData())
                 .phoneNumber(userDTO.getPhoneNumber())
-//                .createdDate(userDTO.getCreatedDate())
                 .userStatus(toModelUserStatus(userDTO.getUserStatus()))
                 .build();
 
@@ -138,8 +144,8 @@ public class UserDAO {
         return user;
     }
 
-    public UserDTO.UserStatus toDTOUserStatus(User.UserStatus userStatus){
-        if (userStatus == null){
+    public UserDTO.UserStatus toDTOUserStatus(User.UserStatus userStatus) {
+        if (userStatus == null) {
             return null;
         }
         return switch (userStatus) {
@@ -148,8 +154,8 @@ public class UserDAO {
         };
     }
 
-    public User.UserStatus toModelUserStatus(UserDTO.UserStatus userStatus){
-        if (userStatus == null){
+    public User.UserStatus toModelUserStatus(UserDTO.UserStatus userStatus) {
+        if (userStatus == null) {
             return null;
         }
         return switch (userStatus) {
@@ -157,5 +163,4 @@ public class UserDAO {
             case UNBLOCK -> User.UserStatus.UNBLOCK;
         };
     }
-
 }

@@ -1,24 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { PencilAltIcon, TrashIcon, SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid';
-import AdminGreeting from '../../components/AdminGreeting/AdminGreeting';
+import React, { useState, useEffect } from "react";
+import {
+  PencilAltIcon,
+  BanIcon,
+  CheckCircleIcon,
+  SortAscendingIcon,
+  SortDescendingIcon,
+} from "@heroicons/react/solid";
+import AdminGreeting from "../../components/AdminGreeting/AdminGreeting";
 
 const AdminUserManagement = () => {
-  const userId = sessionStorage.getItem('userId')
+  const userId = sessionStorage.getItem("userId");
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState({
     userId: null,
-    userName: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dob: '',
-    bio: '',
-    imageUrl: '',
+    userName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    dob: "",
+    bio: "",
   });
-  const [sortCriteria, setSortCriteria] = useState({ key: 'userId', order: 'asc' });
+  const [sortCriteria, setSortCriteria] = useState({
+    key: "userId",
+    order: "asc",
+  });
 
   const usersPerPage = 10;
   const totalPages = Math.ceil(users.length / usersPerPage);
@@ -30,15 +38,15 @@ const AdminUserManagement = () => {
   }, []);
 
   const fetchUsers = () => {
-    fetch('http://localhost:8080/questor/user')
-      .then(response => {
+    fetch("http://localhost:8080/questor/user")
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
-      .then(data => setUsers(data))
-      .catch(error => console.error('Error fetching users:', error));
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error fetching users:", error));
   };
 
   const handleEdit = (user) => {
@@ -46,38 +54,53 @@ const AdminUserManagement = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (userId) => {
-    fetch(`http://localhost:8080/questor/user/${userId}`, {
-      method: 'DELETE',
+  const handleBlock = (userId) => {
+    fetch(`http://localhost:8080/questor/user/block/${userId}`, {
+      method: "PUT",
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Failed to delete user');
+          throw new Error("Failed to block user");
         }
-        setUsers(users.filter(user => user.userId !== userId));
+        fetchUsers();
       })
-      .catch(error => console.error('Error deleting user:', error));
+      .catch((error) => console.error("Error blocking user:", error));
+  };
+
+  const handleUnblock = (userId) => {
+    fetch(`http://localhost:8080/questor/user/unblock/${userId}`, {
+      method: "PUT",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to unblock user");
+        }
+        fetchUsers();
+      })
+      .catch((error) => console.error("Error unblocking user:", error));
   };
 
   const handleSave = () => {
-    const endpoint = selectedUser.userId ? `/questor/user/update/${selectedUser.userId}` : '/questor/user/saveUser';
-    const method = selectedUser.userId ? 'PUT' : 'POST';
+    const endpoint = selectedUser.userId
+      ? `/questor/user/update/${selectedUser.userId}`
+      : "/questor/user/saveUser";
+    const method = selectedUser.userId ? "PUT" : "POST";
 
     fetch(`http://localhost:8080${endpoint}`, {
       method: method,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(selectedUser),
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Failed to save user');
+          throw new Error("Failed to save user");
         }
         setIsModalOpen(false);
         fetchUsers();
       })
-      .catch(error => console.error('Error saving user:', error));
+      .catch((error) => console.error("Error saving user:", error));
   };
 
   const handlePageChange = (pageNumber) => {
@@ -85,10 +108,11 @@ const AdminUserManagement = () => {
   };
 
   const handleSort = (key) => {
-    const order = sortCriteria.key === key && sortCriteria.order === 'asc' ? 'desc' : 'asc';
+    const order =
+      sortCriteria.key === key && sortCriteria.order === "asc" ? "desc" : "asc";
     const sortedUsers = [...users].sort((a, b) => {
-      if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
-      if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
+      if (a[key] < b[key]) return order === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return order === "asc" ? 1 : -1;
       return 0;
     });
     setUsers(sortedUsers);
@@ -155,7 +179,7 @@ const AdminUserManagement = () => {
                     <SortDescendingIcon className="inline w-5 h-5" />
                   ))}
               </th>
-              <th
+              {/* <th
                 className="py-2 px-4 text-left cursor-pointer"
                 onClick={() => handleSort("userId")}
               >
@@ -166,7 +190,7 @@ const AdminUserManagement = () => {
                   ) : (
                     <SortDescendingIcon className="inline w-5 h-5" />
                   ))}
-              </th>
+              </th> */}
               <th className="py-2 px-4 text-center">Actions</th>
             </tr>
           </thead>
@@ -177,7 +201,7 @@ const AdminUserManagement = () => {
                 <td className="py-2 px-4">{user.firstName}</td>
                 <td className="py-2 px-4">{user.lastName}</td>
                 <td className="py-2 px-4">{user.email}</td>
-                <td className="py-2 px-4">{user.userId}</td>
+                {/* <td className="py-2 px-4">{user.userId}</td> */}
                 <td className="py-2 px-4 text-center">
                   <button
                     onClick={() => handleEdit(user)}
@@ -185,12 +209,21 @@ const AdminUserManagement = () => {
                   >
                     <PencilAltIcon className="w-5 h-5" />
                   </button>
-                  <button
-                    onClick={() => handleDelete(user.userId)}
-                    className="bg-red-600 text-white py-1 px-3 rounded-full"
-                  >
-                    <TrashIcon className="w-5 h-5" />
-                  </button>
+                  {user.userStatus === "UNBLOCK" ? (
+                    <button
+                      onClick={() => handleBlock(user.userId)}
+                      className="bg-red-600 text-white py-1 px-3 rounded-full"
+                    >
+                      <BanIcon className="w-5 h-5" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleUnblock(user.userId)}
+                      className="bg-green-600 text-white py-1 px-3 rounded-full"
+                    >
+                      <CheckCircleIcon className="w-5 h-5" />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -300,21 +333,6 @@ const AdminUserManagement = () => {
                       setSelectedUser({ ...selectedUser, bio: e.target.value })
                     }
                     className="w-full p-2 bg-gray-600 rounded-lg"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-2">Image URL</label>
-                  <input
-                    type="text"
-                    value={selectedUser.imageUrl}
-                    onChange={(e) =>
-                      setSelectedUser({
-                        ...selectedUser,
-                        imageUrl: e.target.value,
-                      })
-                    }
-                    className="w-full p-2 bg-gray-600 rounded-lg"
-                    required
                   />
                 </div>
                 <div className="flex justify-end space-x-4">

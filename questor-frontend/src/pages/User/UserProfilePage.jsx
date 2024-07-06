@@ -22,7 +22,6 @@ const UserProfilePage = () => {
     phoneNumber: "",
     bio: "",
     dateOfBirth: "",
-    imageUrl: "",
     imageData: "",
     currentPassword: "",
     newPassword: "",
@@ -94,6 +93,11 @@ const UserProfilePage = () => {
       updatedUser.dob = updatedUser.dateOfBirth;
     }
 
+    // Ensure userStatus is set
+    if (!updatedUser.userStatus) {
+      updatedUser.userStatus = "UNBLOCK";
+    }
+
     fetch("http://localhost:8080/questor/user/update", {
       method: "PUT",
       headers: {
@@ -112,6 +116,7 @@ const UserProfilePage = () => {
       })
       .catch((error) => console.error("Error updating user data:", error));
   };
+
 
   const handleCancel = () => {
     console.log("Cancel clicked");

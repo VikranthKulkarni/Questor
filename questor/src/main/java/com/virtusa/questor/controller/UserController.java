@@ -22,18 +22,18 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/count")
-    public long countUsers(){
+    public long countUsers() {
         return userService.countUsers();
     }
 
     @PostMapping("/saveUser")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         UserDTO savedUser = userService.saveUser(userDTO);
         return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping("/getUser/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         UserDTO userDTO = userService.getUserById(id);
         return ResponseEntity.ok(userDTO);
     }
@@ -50,6 +50,11 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+        // Set default userStatus if null
+        if (userDTO.getUserStatus() == null) {
+            userDTO.setUserStatus(UserDTO.UserStatus.UNBLOCK);
+        }
+        System.out.println("Controller: " + userDTO);
         return ResponseEntity.ok(userService.updateUser(userDTO));
     }
 
@@ -63,6 +68,22 @@ public class UserController {
     public ResponseEntity<Boolean> validatePassword(@RequestBody UserDTO userDTO) {
         boolean isValid = userService.validatePassword(userDTO.getUserId(), userDTO.getPassword());
         return ResponseEntity.ok(isValid);
+    }
+
+    @PutMapping("/block/{id}")
+    public ResponseEntity<UserDTO> blockUser(@PathVariable Long id) {
+        System.out.println(id);
+        UserDTO updatedUser = userService.blockUser(id);
+        System.out.println("After update :" + updatedUser);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("/unblock/{id}")
+    public ResponseEntity<UserDTO> unblockUser(@PathVariable Long id) {
+        System.out.println(id);
+        UserDTO updatedUser = userService.unblockUser(id);
+        System.out.println("After update :" + updatedUser);
+        return ResponseEntity.ok(updatedUser);
     }
 
 }

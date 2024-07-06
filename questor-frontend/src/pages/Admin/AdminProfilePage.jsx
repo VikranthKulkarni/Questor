@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const AdminProfilePage = () => {
   const userId = sessionStorage.getItem("userId");
+
   const [user, setUser] = useState({
     userId: "",
     firstName: "",
@@ -11,7 +12,7 @@ const AdminProfilePage = () => {
     phoneNumber: "",
     bio: "",
     dateOfBirth: "",
-    imageUrl: "",
+    imageData: "",
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
@@ -33,6 +34,7 @@ const AdminProfilePage = () => {
           bio: data.bio || "",
           dateOfBirth: data.dob ? data.dob.split("T")[0] : "",
           imageUrl: data.imageUrl || "",
+          imageData: data.imageData || "",
           currentPassword: "",
           newPassword: "",
           confirmNewPassword: "",
@@ -53,6 +55,18 @@ const AdminProfilePage = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setUser((prevUser) => ({
+        ...prevUser,
+        imageData: reader.result.split(",")[1], // Get base64 string without the data URI prefix
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSaveChanges = (e) => {
     e.preventDefault();
 
@@ -65,9 +79,13 @@ const AdminProfilePage = () => {
       updatedUser.password = user.newPassword;
     }
 
-    // Update DOB formatting if needed
     if (updatedUser.dateOfBirth) {
       updatedUser.dob = updatedUser.dateOfBirth;
+    }
+
+    // Ensure userStatus is set
+    if (!updatedUser.userStatus) {
+      updatedUser.userStatus = "UNBLOCK";
     }
 
     fetch("http://localhost:8080/questor/user/update", {
@@ -93,6 +111,28 @@ const AdminProfilePage = () => {
     console.log("Cancel clicked");
   };
 
+  const handleImageUpdate = () => {
+    document.getElementById("imageUpload").click();
+  };
+
+  const handleImageDelete = () => {
+    const updatedUser = { ...user, imageData: "" };
+
+    fetch("http://localhost:8080/questor/user/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data);
+        alert("Image deleted successfully");
+      })
+      .catch((error) => console.error("Error deleting image:", error));
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -108,8 +148,9 @@ const AdminProfilePage = () => {
             <div className="flex flex-col items-center mb-8">
               <img
                 src={
-                  user.imageUrl ||
-                  "https://tse3.mm.bing.net/th/id/OIP.wU8p3LA0N6n7XVmwyehlTQHaHa?w=182&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7"
+                  user.imageData
+                    ? `data:image/jpeg;base64,${user.imageData}`
+                    : "https://tse3.mm.bing.net/th/id/OIP.wU8p3LA0N6n7XVmwyehlTQHaHa?w=182&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7"
                 }
                 alt="Profile"
                 className="w-32 h-32 rounded-full mb-4"
@@ -118,11 +159,23 @@ const AdminProfilePage = () => {
                 {user.firstName} {user.lastName}
               </h2>
               <div className="flex space-x-4">
-                <button className="bg-gray-900 text-white py-2 px-4 rounded-full">
-                  Upload New Photo
+                <input
+                  type="file"
+                  id="imageUpload"
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
+                />
+                <button
+                  onClick={handleImageUpdate}
+                  className="bg-gray-900 text-white py-2 px-4 rounded-full"
+                >
+                  Update Image
                 </button>
-                <button className="bg-gray-900 text-white py-2 px-4 rounded-full">
-                  Delete
+                <button
+                  onClick={handleImageDelete}
+                  className="bg-gray-900 text-white py-2 px-4 rounded-full"
+                >
+                  Delete Image
                 </button>
               </div>
             </div>
@@ -185,14 +238,6 @@ const AdminProfilePage = () => {
                 onChange={handleInputChange}
                 name="dateOfBirth"
                 className="w-full p-4 bg-gray-700 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
-              />
-              <input
-                type="text"
-                value={user.imageUrl}
-                onChange={handleInputChange}
-                name="imageUrl"
-                className="w-full p-4 bg-gray-700 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
-                placeholder="Image URL"
               />
               <div className="flex space-x-4">
                 <input

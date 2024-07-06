@@ -32,6 +32,9 @@ public class AuthController {
         if (!passwordEncoder.matches(loginDTO.getPassword(), userDTO.getPassword())) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
+        if (userDTO.getUserStatus() == UserDTO.UserStatus.BLOCK) {
+            return ResponseEntity.status(403).body("Your account is blocked");
+        }
         HttpSession session = request.getSession();
         session.setAttribute("userId", userDTO.getUserId());
 
