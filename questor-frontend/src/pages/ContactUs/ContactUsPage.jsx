@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import NavbarDynamic from '../../components/navbar/NavbarDynamic';
 import { PhoneIcon, MailIcon, LocationMarkerIcon } from '@heroicons/react/solid';
+import Fotter from '../../components/footer/Fotter';
 
 
 const ContactUsPage = () => {
@@ -54,6 +55,7 @@ const ContactUsPage = () => {
     { name: "Wishlist", url: `/wishlist/${userId}` },
     { name: "Contact Us", url: "/contactUs" },
     { name: "My Requests", url: `/userRequests/${userId}` },
+    { name: "About Us", url: "/about-us" },
   ];
  
   return (
@@ -61,7 +63,7 @@ const ContactUsPage = () => {
     <div style={{zIndex:'9999999'}}>
       <NavbarDynamic links={navbarLinks}/>
     </div>
-      <div className="w-3/4 p-8 mt-28">
+      <div className="flex-grow w-3/4 p-8 mt-28">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold">Contact Us</h1>
           <p className="mt-2 text-lg">We are here for you. Just write us a message!</p>
@@ -149,6 +151,7 @@ const ContactUsPage = () => {
           </div>
         </div>
       </div>
+      <Fotter/>
     </div>
   );
 };

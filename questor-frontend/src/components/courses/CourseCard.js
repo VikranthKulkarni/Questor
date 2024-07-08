@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/solid";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CourseCard = ({ courseId, title, image }) => {
   const navigate = useNavigate();
@@ -70,7 +72,8 @@ const CourseCard = ({ courseId, title, image }) => {
           }
         );
         setIsInWishlist(false);
-        alert("Course has been removed from your wishlist");
+        // alert("Course has been removed from your wishlist");
+        toast.success("Course removed from wishlist")
       } else {
         // Add course to wishlist
         await fetch(
@@ -80,7 +83,8 @@ const CourseCard = ({ courseId, title, image }) => {
           }
         );
         setIsInWishlist(true);
-        alert("Course has been added to your wishlist");
+        // alert("Course has been added to your wishlist");
+        toast.success("Course added to wishlist")
       }
     } catch (error) {
       console.error("Error toggling wishlist:", error);

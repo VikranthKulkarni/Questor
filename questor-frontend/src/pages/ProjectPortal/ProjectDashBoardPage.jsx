@@ -8,6 +8,7 @@ import HowToUse from "../../components/ProjectSidePages/HowToUse";
 import TermsAndConditions from "../../components/ProjectSidePages/TermsAndConditions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Fotter from "../../components/footer/Fotter";
 
 const ProjectDashBoardPage = () => {
   const userId = sessionStorage.getItem("userId");
@@ -35,6 +36,7 @@ const ProjectDashBoardPage = () => {
     { name: "Wishlist", url: `/wishlist/${userId}` },
     { name: "Contact Us", url: "/contactUs" },
     { name: "My Requests", url: `/userRequests/${userId}` },
+    { name: "About Us", url: "/about-us" },
   ];
 
   useEffect(() => {
@@ -321,6 +323,7 @@ const ProjectDashBoardPage = () => {
         isOpen={isTermsOpen}
         onClose={() => setIsTermsOpen(false)}
       />
+      <Fotter/>
     </div>
   );
 };

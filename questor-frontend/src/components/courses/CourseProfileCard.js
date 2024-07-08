@@ -27,7 +27,7 @@ const CourseProfileCard = () => {
   };
 
   return (
-    <div className="bg-gray-700 p-4 rounded-xl text-left w-full flex flex-wrap items-center">
+    <div className="bg-gray-700 p-4 rounded-xl text-left w-full flex flex-col md:flex-row items-center h-full">
       <div className="flex-shrink-0 flex items-center mb-4 md:mb-0 md:mr-4">
         <div className="bg-black rounded-full w-16 h-16 flex items-center justify-center">
           <img
@@ -49,9 +49,9 @@ const CourseProfileCard = () => {
           @{user.userName}
         </p>
       </div>
-      <div className="flex justify-center w-full md:w-auto">
+      <div className="w-full md:w-auto flex justify-center md:justify-end mt-4 md:mt-0">
         <button
-          className="bg-black text-white py-2 px-4 rounded-full"
+          className="bg-black text-white py-2 px-4 rounded-full truncate"
           onClick={handleProfileClick}
         >
           Profile

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import NavbarDynamic from "../../components/navbar/NavbarDynamic";
 import WishlistCard from "../../components/courses/WishlistCard";
+import Fotter from "../../components/footer/Fotter";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -12,6 +15,7 @@ const WishlistPage = () => {
     { name: "Wishlist", url: `/wishlist/${userId}` },
     { name: "Contact Us", url: "/contactUs" },
     { name: "My Requests", url: `/userRequests/${userId}` },
+    { name: "About Us", url: "/about-us" },
   ];
 
   useEffect(() => {
@@ -47,17 +51,19 @@ const WishlistPage = () => {
       setWishlist((prevWishlist) =>
         prevWishlist.filter((course) => course.courseId !== courseId)
       );
+      toast.success("Course removed from wishlist!")
     } catch (error) {
       console.error("Error deleting course from wishlist:", error);
+      toast.error("Failed to remove course from wishlist.")
     }
   };
 
   return (
-    <div className="bg-black min-h-screen text-white">
-      <div style={{ zIndex: "9999999" }}>
+    <div className="bg-black min-h-screen flex flex-col text-white">
+      <div style={{ zIndex: "999" }}>
         <NavbarDynamic links={navbarLinks} />
       </div>
-      <div className="pt-32 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="flex-grow  pt-32 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <header className="bg-gray-900 shadow mb-4 rounded-xl">
           <div className="px-4 py-6 sm:px-6 lg:px-8 ">
             <h1 className="text-3xl font-bold tracking-tight text-white">
@@ -79,6 +85,7 @@ const WishlistPage = () => {
           </div>
         </main>
       </div>
+      <Fotter/>
     </div>
   );
 };

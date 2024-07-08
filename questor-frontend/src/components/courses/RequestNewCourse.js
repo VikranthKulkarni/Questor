@@ -18,14 +18,14 @@ const RequestNewCourse = () => {
   };
 
   return (
-    <div className="bg-gray-700 p-4 rounded-xl text-left w-full flex flex-col items-center md:items-start">
-      <div className="flex flex-col justify-between w-full items-center md:items-start mb-4">
+    <div className="bg-gray-700 p-4 rounded-xl text-left w-full flex flex-col md:flex-row items-center h-full">
+      <div className="flex flex-col justify-between w-full items-center md:items-start mb-4 md:mb-0 flex-grow">
         <h2 className="text-sm font-semibold text-gray-300">QUESTOR</h2>
         <h1 className="text-lg md:text-xl font-bold text-white text-center md:text-left w-full">
           Request a New Course
         </h1>
       </div>
-      <div className="flex justify-center w-full md:w-auto">
+      <div className="w-full md:w-auto flex justify-center md:justify-end">
         <button
           className="bg-white text-gray-900 py-2 px-4 rounded-full"
           onClick={handleRequestCourseClick}

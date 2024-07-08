@@ -51,6 +51,7 @@ const CourseViewPage = () => {
 
   const fetchSectionsContents = async (sections) => {
     const contentsData = {};
+    let firstContent = null;
     for (const section of sections) {
       try {
         const response = await fetch(
@@ -58,6 +59,11 @@ const CourseViewPage = () => {
         );
         const data = await response.json();
         contentsData[section.sectionId] = data;
+        if (!firstContent && data.length > 0) {
+          firstContent = data[0];
+          setSelectedContent(firstContent);
+          setOpenSections((prev) => ({ ...prev, [section.sectionId]: true }));
+        }
       } catch (error) {
         console.error(
           `Error fetching contents for section ${section.sectionId}:`,
@@ -153,7 +159,7 @@ const CourseViewPage = () => {
                     renderContent(selectedContent)
                   ) : (
                     <div className="bg-gray-800 text-white p-4 rounded-lg">
-                      Select a content to display here.
+                      Loading first content...
                     </div>
                   )}
                 </div>

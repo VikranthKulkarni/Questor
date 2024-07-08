@@ -56,24 +56,26 @@ const UserDashboardPage = () => {
     { name: "Project Portal", url: `/projects/${userId}` },
     { name: "Wishlist", url: `/wishlist/${userId}` },
     { name: "Contact Us", url: "/contactUs" },
-    { name: "My Requests", url: `/userRequests/${userId}` }
+    { name: "My Requests", url: `/userRequests/${userId}` },
+    { name: "About Us", url: "/about-us" },
   ];
 
   return (
     <div className="bg-black min-h-screen flex flex-col text-white">
-      <div style={{ zIndex: "9999999" }}>
+      <div style={{ zIndex: "999" }}>
         <NavbarDynamic links={navbarLinks} />
       </div>
+
       <div className="flex-grow w-full flex justify-center items-center mt-32">
-        <div className="mx-auto w-3/4">
-          <div className="flex flex-col md:flex-row justify-center items-center mb-8 space-y-4 md:space-y-0 md:space-x-4">
-            <div className="w-full md:w-1/3">
-              <div className="bg-gray-700 p-8 rounded-xl text-left h-full">
+        <div className="mx-auto w-11/12 md:w-3/4">
+          <div className="flex flex-col md:flex-row justify-center items-stretch mb-8 space-y-4 md:space-y-0 md:space-x-4 h-auto md:h-32">
+            <div className="w-full md:w-1/2 flex flex-col h-full">
+              <div className="bg-gray-700 p-4 rounded-xl text-left h-full flex flex-col md:flex-row items-center">
                 <RequestNewCourse />
               </div>
             </div>
-            <div className="w-full md:w-1/3">
-              <div className="bg-gray-700 p-8 rounded-xl text-left h-full">
+            <div className="w-full md:w-1/2 flex flex-col h-full">
+              <div className="bg-gray-700 p-4 rounded-xl text-left h-full flex flex-col md:flex-row items-center">
                 <CourseProfileCard />
               </div>
             </div>
@@ -132,11 +134,10 @@ const UserDashboardPage = () => {
               View upcoming courses
             </button>
           </div>
-
-          {/* Footer Section */}
-          <Fotter />
         </div>
       </div>
+      {/* Footer Section */}
+      <Fotter />
     </div>
   );
 };

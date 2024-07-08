@@ -16,6 +16,10 @@ import WishlistPage from "../pages/User/WishlistPage";
 import PricingPage from "../pages/User/PricingPage";
 import PaymentPage from "../pages/User/PaymentPage";
 import UserRequestsPage from "../pages/User/UserRequestsPage";
+import AboutUsPage from "../components/footer/FooterPages/AboutUs";
+import TermsOfServicePage from "../components/footer/FooterPages/TermsOfService";
+import PrivacyPolicyPage from "../components/footer/FooterPages/PrivacyPolicy";
+import CookieNoticePage from "../components/footer/FooterPages/CookieNotice";
 
 const AppRoutes = () => {
   return (
@@ -99,7 +103,15 @@ const AppRoutes = () => {
           }
         />
 
-        <Route path = "/userRequests/:userId" element = {<PrivateRoute element={UserRequestsPage} allowedRoles={["isUser"]}/>}/>
+        <Route
+          path="/userRequests/:userId"
+          element={
+            <PrivateRoute
+              element={UserRequestsPage}
+              allowedRoles={["isUser"]}
+            />
+          }
+        />
 
         {/* Admin Routes */}
         <Route
@@ -114,6 +126,41 @@ const AppRoutes = () => {
             <PrivateRoute
               element={AdminCourseDetails}
               allowedRoles={["isAdmin"]}
+            />
+          }
+        />
+
+        {/* Footer Routes */}
+        <Route
+          path="/about-us"
+          element={
+            <PrivateRoute element={AboutUsPage} allowedRoles={["isUser"]} />
+          }
+        />
+        <Route
+          path="/terms-of-service"
+          element={
+            <PrivateRoute
+              element={TermsOfServicePage}
+              allowedRoles={["isUser"]}
+            />
+          }
+        />
+        <Route
+          path="/privacy-policy"
+          element={
+            <PrivateRoute
+              element={PrivacyPolicyPage}
+              allowedRoles={["isUser"]}
+            />
+          }
+        />
+        <Route
+          path="/cookie-notice"
+          element={
+            <PrivateRoute
+              element={CookieNoticePage}
+              allowedRoles={["isUser"]}
             />
           }
         />
