@@ -1,0 +1,16 @@
+/* toastStyles.css */
+.custom-toast {
+  background-color: #333; /* Dark background */
+  color: #fff; /* White text */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px; /* Padding */
+}
+
+.custom-toast-container {
+  width: 300px;
+}
+
+.custom-toast-success {
+  background-color: #fff !important; /* Success background color */
+  color: #4b5564 !important; /* Success text color */
+}
