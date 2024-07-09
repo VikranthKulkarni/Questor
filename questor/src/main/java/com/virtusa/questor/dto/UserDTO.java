@@ -24,6 +24,9 @@ public class UserDTO {
     private byte[] imageData;
     private String phoneNumber;
 
+    private String securityQuestion;
+    private String securityAnswer;
+
     private Date createdDate;
 
     @Enumerated(EnumType.STRING)

@@ -5,13 +5,9 @@ import com.virtusa.questor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -38,6 +34,12 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
+    @GetMapping("/getUserByUserName/{userName}")
+    public ResponseEntity<UserDTO> getUserByUserName(@PathVariable String userName) {
+        UserDTO userDTO = userService.findUserByUserName(userName);
+        return ResponseEntity.ok(userDTO);
+    }
+
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
@@ -54,7 +56,6 @@ public class UserController {
         if (userDTO.getUserStatus() == null) {
             userDTO.setUserStatus(UserDTO.UserStatus.UNBLOCK);
         }
-        System.out.println("Controller: " + userDTO);
         return ResponseEntity.ok(userService.updateUser(userDTO));
     }
 
@@ -72,17 +73,30 @@ public class UserController {
 
     @PutMapping("/block/{id}")
     public ResponseEntity<UserDTO> blockUser(@PathVariable Long id) {
-        System.out.println(id);
         UserDTO updatedUser = userService.blockUser(id);
-        System.out.println("After update :" + updatedUser);
         return ResponseEntity.ok(updatedUser);
     }
 
     @PutMapping("/unblock/{id}")
     public ResponseEntity<UserDTO> unblockUser(@PathVariable Long id) {
-        System.out.println(id);
         UserDTO updatedUser = userService.unblockUser(id);
-        System.out.println("After update :" + updatedUser);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostMapping("/validateSecurityAnswer")
+    public ResponseEntity<Boolean> validateSecurityAnswer(@RequestBody Map<String, String> request) {
+        Long userId = Long.valueOf(request.get("userId"));
+        String question = request.get("question");
+        String answer = request.get("answer");
+        boolean isValid = userService.validateSecurityAnswer(userId, question, answer);
+        return ResponseEntity.ok(isValid);
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseEntity<UserDTO> updatePassword(@RequestBody Map<String, String> request) {
+        Long userId = Long.valueOf(request.get("userId"));
+        String newPassword = request.get("newPassword");
+        UserDTO updatedUser = userService.updatePassword(userId, newPassword);
         return ResponseEntity.ok(updatedUser);
     }
 

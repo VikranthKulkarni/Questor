@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,7 +22,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public ResponseEntity<?> login(@RequestBody UserDTO loginDTO, HttpServletRequest request) {
         UserDTO userDTO = userService.findUserByUserName(loginDTO.getUserName());
         if (userDTO == null) {

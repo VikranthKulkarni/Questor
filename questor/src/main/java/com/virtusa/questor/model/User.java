@@ -55,6 +55,12 @@ public class User {
     @Column(name = "user_status", nullable = false)
     private UserStatus userStatus;
 
+    @Column(name = "security_question")
+    private String securityQuestion;
+
+    @Column(name = "security_answer")
+    private String securityAnswer;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Project> projects;
 

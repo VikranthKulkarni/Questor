@@ -25,6 +25,10 @@ const PrivateRoute = ({
     fetchSubscription();
   }, [userId]);
 
+  if(!userId){
+    return <Navigate to="/"/>
+  }
+
   if (!subscription) {
     return null;
   }

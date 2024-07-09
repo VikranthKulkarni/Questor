@@ -26,6 +26,8 @@ const UserProfilePage = () => {
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
+    securityQuestion: "",
+    securityAnswer: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -43,8 +45,9 @@ const UserProfilePage = () => {
           phoneNumber: data.phoneNumber || "",
           bio: data.bio || "",
           dateOfBirth: data.dob ? data.dob.split("T")[0] : "",
-          imageUrl: data.imageUrl || "",
           imageData: data.imageData || "",
+          securityQuestion: data.securityQuestion || "",
+          securityAnswer: data.securityAnswer || "",
           currentPassword: "",
           newPassword: "",
           confirmNewPassword: "",
@@ -116,7 +119,6 @@ const UserProfilePage = () => {
       })
       .catch((error) => console.error("Error updating user data:", error));
   };
-
 
   const handleCancel = () => {
     console.log("Cancel clicked");
@@ -251,6 +253,47 @@ const UserProfilePage = () => {
                 name="dateOfBirth"
                 className="w-full p-4 bg-gray-700 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
+              {/* Security question and answer start */}
+              <div className="flex flex-col space-y-4">
+                <label className="text-sm font-bold text-gray-400">
+                  Security Question
+                </label>
+                <select
+                  value={user.securityQuestion}
+                  onChange={handleInputChange}
+                  name="securityQuestion"
+                  className="w-full p-4 bg-gray-700 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  <option value="" disabled>
+                    Select a security question
+                  </option>
+                  <option value="What is your favorite color?">
+                    What is your favorite color?
+                  </option>
+                  <option value="What is your pet's name?">
+                    What is your pet's name?
+                  </option>
+                  <option value="What is your mother's maiden name?">
+                    What is your mother's maiden name?
+                  </option>
+                  <option value="What was your first school?">
+                    What was your first school?
+                  </option>
+                  <option value="What is your hometown?">
+                    What is your hometown?
+                  </option>
+                </select>
+                <input
+                  type="text"
+                  value={user.securityAnswer}
+                  onChange={handleInputChange}
+                  name="securityAnswer"
+                  className="w-full p-4 bg-gray-700 border border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  placeholder="Answer"
+                />
+              </div>
+              {/* security answer and question end */}
+
               <div className="flex space-x-4">
                 <input
                   type="password"
@@ -296,7 +339,7 @@ const UserProfilePage = () => {
           </div>
         </div>
       </div>
-      <Fotter/>
+      <Fotter />
     </div>
   );
 };

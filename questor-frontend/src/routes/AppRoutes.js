@@ -20,6 +20,7 @@ import AboutUsPage from "../components/footer/FooterPages/AboutUs";
 import TermsOfServicePage from "../components/footer/FooterPages/TermsOfService";
 import PrivacyPolicyPage from "../components/footer/FooterPages/PrivacyPolicy";
 import CookieNoticePage from "../components/footer/FooterPages/CookieNotice";
+import RecoverPasswordPage from "../pages/Auth/RecoverPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +31,10 @@ const AppRoutes = () => {
         <Route
           path="/register"
           element={<PublicRoute element={RegisterPage} />}
+        />
+        <Route
+          path="/recover"
+          element={<PublicRoute element={RecoverPasswordPage} />}
         />
 
         {/* Pricing and Payment Routes */}
@@ -102,7 +107,6 @@ const AppRoutes = () => {
             <PrivateRoute element={WishlistPage} allowedRoles={["isUser"]} />
           }
         />
-
         <Route
           path="/userRequests/:userId"
           element={
@@ -134,7 +138,10 @@ const AppRoutes = () => {
         <Route
           path="/about-us"
           element={
-            <PrivateRoute element={AboutUsPage} allowedRoles={["isUser"]} />
+            <PrivateRoute
+              element={AboutUsPage}
+              allowedRoles={["isUser"]}
+            />
           }
         />
         <Route

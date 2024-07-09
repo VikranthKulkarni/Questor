@@ -73,4 +73,13 @@ public class UserService {
         }
         return null;
     }
+
+
+    public boolean validateSecurityAnswer(Long userId, String question, String answer) {
+        return userDAO.validateSecurityAnswer(userId, question, answer);
+    }
+
+    public UserDTO updatePassword(Long userId, String newPassword) {
+        return userDAO.updatePassword(userId, newPassword);
+    }
 }

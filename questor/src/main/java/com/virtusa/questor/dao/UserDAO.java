@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -84,6 +85,22 @@ public class UserDAO {
         return userRepo.findByUserName(userName).map(this::toDTO).orElseThrow(() -> new RuntimeException("User not found with username: " + userName));
     }
 
+    public boolean validateSecurityAnswer(Long userId, String question, String answer) {
+        Optional<User> userOpt = userRepo.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            return user.getSecurityQuestion().equals(question) && user.getSecurityAnswer().equals(answer);
+        }
+        return false;
+    }
+
+    public UserDTO updatePassword(Long userId, String newPassword) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+        return toDTO(user);
+    }
+
     private void updateUserDetails(User existingUser, UserDTO userDTO, boolean updatePassword) {
         existingUser.setFirstName(userDTO.getFirstName());
         existingUser.setLastName(userDTO.getLastName());
@@ -93,6 +110,8 @@ public class UserDAO {
         existingUser.setBio(userDTO.getBio());
         existingUser.setDob(userDTO.getDob());
         existingUser.setImageData(userDTO.getImageData());
+        existingUser.setSecurityQuestion(userDTO.getSecurityQuestion());
+        existingUser.setSecurityAnswer(userDTO.getSecurityAnswer());
 
         if (userDTO.getUserStatus() != null) {
             existingUser.setUserStatus(toModelUserStatus(userDTO.getUserStatus()));
@@ -119,6 +138,8 @@ public class UserDAO {
                 .imageData(user.getImageData())
                 .createdDate(user.getCreatedDate())
                 .userStatus(toDTOUserStatus(user.getUserStatus()))
+                .securityQuestion(user.getSecurityQuestion())
+                .securityAnswer(user.getSecurityAnswer())
                 .build();
     }
 
@@ -135,6 +156,8 @@ public class UserDAO {
                 .imageData(userDTO.getImageData())
                 .phoneNumber(userDTO.getPhoneNumber())
                 .userStatus(toModelUserStatus(userDTO.getUserStatus()))
+                .securityQuestion(userDTO.getSecurityQuestion())
+                .securityAnswer(userDTO.getSecurityAnswer())
                 .build();
 
         // Set createdDate only if it's not already set
