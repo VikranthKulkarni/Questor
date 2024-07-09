@@ -11,6 +11,7 @@ import AdminTransactionManagement from "./AdminTransactionManagement";
 import AdminGreeting from "../../components/AdminGreeting/AdminGreeting";
 import AdminCourseRequestManagement from "./AdminCourseRequestManagement";
 import { PieChart, Pie, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import AdminUpcomingCoursesManagementPage from "./AdminUpcomingCoursesManagementPage";
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -100,6 +101,8 @@ const AdminDashboard = () => {
         return <AdminTransactionManagement />;
       case "courseRequestManagement":
         return <AdminCourseRequestManagement />;
+      case "upcomingCoursesManagement":
+        return <AdminUpcomingCoursesManagementPage />;
       case "profile":
         return <AdminProfilePage />;
       case "dashboard":

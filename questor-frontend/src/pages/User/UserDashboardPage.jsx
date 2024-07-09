@@ -4,12 +4,14 @@ import CourseCard from "../../components/courses/CourseCard";
 import Fotter from "../../components/footer/Fotter";
 import CourseProfileCard from "../../components/courses/CourseProfileCard";
 import RequestNewCourse from "../../components/courses/RequestNewCourse";
+import UpcomingCoursesModal from "../../components/courses/UpcomingCoursesModal";
 
 const UserDashboardPage = () => {
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchCourses();
@@ -130,7 +132,10 @@ const UserDashboardPage = () => {
               Begin the journey of your dream career today by joining our
               expansive community of students and mentors.
             </p>
-            <button className="bg-white text-indigo-900 py-2 px-4 rounded-full">
+            <button
+              className="bg-white text-indigo-900 py-2 px-4 rounded-full hover:bg-gray-200 transition duration-300"
+              onClick={() => setIsModalOpen(true)}
+            >
               View upcoming courses
             </button>
           </div>
@@ -138,6 +143,11 @@ const UserDashboardPage = () => {
       </div>
       {/* Footer Section */}
       <Fotter />
+      {/* Upcoming Courses Modal */}
+      <UpcomingCoursesModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

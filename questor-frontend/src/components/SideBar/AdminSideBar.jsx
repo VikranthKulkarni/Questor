@@ -12,6 +12,7 @@ import {
   CalendarIcon,
   LinkIcon,
   ClipboardCheckIcon,
+  ClipboardListIcon,
 } from "@heroicons/react/solid";
 
 const AdminSidebar = ({ setActiveSection }) => {
@@ -88,6 +89,14 @@ const AdminSidebar = ({ setActiveSection }) => {
         >
           <ClipboardCheckIcon className="w-6 h-6 text-white" />
           <span>Manage Course Requests</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSection("upcomingCoursesManagement")}
+          className="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg w-full"
+        >
+          <ClipboardListIcon className="w-6 h-6 text-white" />
+          <span>Manage Upcoming Courses</span>
         </button>
 
         <button
